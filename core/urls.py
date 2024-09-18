@@ -8,8 +8,8 @@ from resources.views import ResourceViewSet
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 
 router = DefaultRouter()
-router.register(r'resources', ResourceViewSet)
-router.register(r'auth/users', UserViewSet)
+router.register(r'resources', ResourceViewSet, basename='resources')
+router.register(r'auth/users', UserViewSet, basename='users')
 
 urlpatterns = [
     path('admin/', admin.site.urls),
