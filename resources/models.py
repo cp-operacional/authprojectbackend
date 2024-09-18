@@ -1,6 +1,8 @@
 from django.db import models
+from django.conf import settings
 
 class Resource(models.Model):
+    user_id = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='resources')
     name = models.CharField(max_length=255)
     color = models.CharField(max_length=50)
     year = models.IntegerField()
