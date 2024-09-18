@@ -1,6 +1,8 @@
+from django.shortcuts import render
 from rest_framework import permissions, viewsets, status
+from authentication.models import Resource, UserAccount
+from authentication.serializers import ResourceSerializer
 from rest_framework.response import Response
-from authentication.models import UserAccount
 from .serializers import UserAccountSerializer
 
 class UserViewSet(viewsets.ModelViewSet):
@@ -23,3 +25,7 @@ class UserViewSet(viewsets.ModelViewSet):
 
     def perform_update(self, serializer):
         serializer.save()
+
+class ResourceViewSet(viewsets.ModelViewSet):
+    queryset = Resource.objects.all()
+    serializer_class = ResourceSerializer
