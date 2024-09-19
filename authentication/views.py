@@ -1,4 +1,5 @@
 from rest_framework import permissions, viewsets
+from rest_framework.decorators import action
 from authentication.models import UserAccount
 from rest_framework.response import Response
 from .serializers import UserAccountSerializer
@@ -23,3 +24,8 @@ class UserViewSet(viewsets.ModelViewSet):
 
     def perform_update(self, serializer):
         serializer.save()
+
+    @action(detail=False, methods=['GET'])
+    def me(self, request):
+        serializer = self.get_serializer(request.user)
+        return Response(serializer.data)

@@ -14,6 +14,7 @@ router.register(r'auth/users', UserViewSet, basename='users')
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include(router.urls)),
+    path('auth/users/me/', UserViewSet.as_view({'get': 'me'}), name='user-me'),
     path('api/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
     path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
 ]
