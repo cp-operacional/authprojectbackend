@@ -7,6 +7,7 @@ class Resource(models.Model):
     color = models.CharField(max_length=50)
     year = models.IntegerField()
     pantone_value = models.CharField(max_length=20)
+    order = models.PositiveIntegerField(default=0, db_index=True)
 
     def __str__(self):
         return self.name
