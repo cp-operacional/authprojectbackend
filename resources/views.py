@@ -13,8 +13,8 @@ class ResourceViewSet(viewsets.ModelViewSet):
         return Resource.objects.filter(user_id=self.request.user).order_by('order')
 
     def perform_create(self, serializer):
-        max_order = Resource.objects.filter(user_id=self.request.user).aggregate(models.Max('order'))['order__max'] or 0
-        serializer.save(user_id=self.request.user, order=max_order + 1)
+        Resource.objects.filter(user_id=self.request.user).update(order=models.F('order') + 1)
+        serializer.save(user_id=self.request.user, order=1)
 
     @action(detail=True, methods=['POST'])
     def move_up(self, request, pk=None):
@@ -39,7 +39,3 @@ class ResourceViewSet(viewsets.ModelViewSet):
 
         serializer = self.get_serializer(item)
         return Response(serializer.data)
-
-    def perform_create(self, serializer):
-        max_order = Resource.objects.filter(user_id=self.request.user).aggregate(models.Max('order'))['order__max'] or 0
-        serializer.save(user_id=self.request.user, order=max_order + 1)
