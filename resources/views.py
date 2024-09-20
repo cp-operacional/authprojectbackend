@@ -1,13 +1,20 @@
 from rest_framework import viewsets, permissions
+from rest_framework.pagination import PageNumberPagination
+from rest_framework.response import Response
 from resources.models import Resource
 from resources.serializers import ResourceSerializer
-from rest_framework.decorators import action
-from rest_framework.response import Response
 from django.db import models
+from rest_framework.decorators import action
+
+class CustomPageNumberPagination(PageNumberPagination):
+    page_size_query_param = 'page_size'
+    max_page_size = 100
+    page_size = 10
 
 class ResourceViewSet(viewsets.ModelViewSet):
     serializer_class = ResourceSerializer
     permission_classes = [permissions.IsAuthenticated]
+    pagination_class = CustomPageNumberPagination
 
     def get_queryset(self):
         return Resource.objects.filter(user_id=self.request.user).order_by('order')

@@ -1,14 +1,21 @@
 from rest_framework import permissions, viewsets
 from rest_framework.decorators import action
+from rest_framework.pagination import PageNumberPagination
 from authentication.models import UserAccount
 from rest_framework.response import Response
 from .serializers import UserAccountSerializer
+
+class CustomPageNumberPagination(PageNumberPagination):
+    page_size_query_param = 'page_size'
+    max_page_size = 100
+    page_size = 10
 
 class UserViewSet(viewsets.ModelViewSet):
     queryset = UserAccount.objects.all().order_by('-date_joined')
     serializer_class = UserAccountSerializer
     permission_classes = [permissions.IsAuthenticated]
-
+    pagination_class = CustomPageNumberPagination
+    
     def get_permissions(self):
         if self.action == 'create':
             return [permissions.AllowAny()]
