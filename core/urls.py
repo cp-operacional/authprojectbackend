@@ -17,4 +17,6 @@ urlpatterns = [
     path('auth/users/me/', UserViewSet.as_view({'get': 'me'}), name='user-me'),
     path('api/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
     path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
+    path('resources/<int:pk>/move_up/', ResourceViewSet.as_view({'post': 'move_up'}), name='resource-move-up'),
+    path('resources/<int:pk>/move_down/', ResourceViewSet.as_view({'post': 'move_down'}), name='resource-move-down'),
 ]
