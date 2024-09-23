@@ -4,6 +4,10 @@ from rest_framework.pagination import PageNumberPagination
 from authentication.models import UserAccount
 from rest_framework.response import Response
 from .serializers import UserAccountSerializer
+from rest_framework.parsers import MultiPartParser, FormParser
+from django.core.files.storage import default_storage
+from django.core.files.base import ContentFile
+import os
 
 class CustomPageNumberPagination(PageNumberPagination):
     page_size_query_param = 'page_size'
@@ -36,3 +40,23 @@ class UserViewSet(viewsets.ModelViewSet):
     def me(self, request):
         serializer = self.get_serializer(request.user)
         return Response(serializer.data)
+
+    @action(detail=False, methods=['POST'], parser_classes=[MultiPartParser, FormParser])
+    def update_avatar(self, request):
+        user = request.user
+        if 'avatar' not in request.FILES:
+            return Response({'error': 'No file provided'}, status=400)
+        
+        avatar = request.FILES['avatar']
+        filename = 'avatar-1' + os.path.splitext(avatar.name)[1]
+        filepath = os.path.join('avatars', filename)
+        
+        if default_storage.exists(filepath):
+            default_storage.delete(filepath)
+        
+        path = default_storage.save(filepath, ContentFile(avatar.read()))
+        
+        user.avatar = path
+        user.save()
+        
+        return Response({'status': 'avatar updated', 'avatar_url': default_storage.url(path)})
