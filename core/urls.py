@@ -20,3 +20,6 @@ urlpatterns = [
     path('resources/<int:pk>/move_up/', ResourceViewSet.as_view({'post': 'move_up'}), name='resource-move-up'),
     path('resources/<int:pk>/move_down/', ResourceViewSet.as_view({'post': 'move_down'}), name='resource-move-down'),
 ]
+
+if settings.DEBUG:
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
