@@ -1,11 +1,12 @@
 from django.contrib import admin
-
 from django.urls import path, include
 from rest_framework.routers import DefaultRouter
 from rest_framework import routers
-from authentication.views import UserViewSet
-from resources.views import ResourceViewSet
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
+
+from authentication.views import UserViewSet
+from core import settings
+from resources.views import ResourceViewSet
 
 router = DefaultRouter()
 router.register(r'resources', ResourceViewSet, basename='resources')
